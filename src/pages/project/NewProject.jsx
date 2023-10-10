@@ -7,14 +7,13 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Header, CompatButton} from '../../components';
-import {StateComponent, DataWidget} from '../../libs/hooks_state/index'
-import ProjectStore from './ProjectStore'
-
+import {LiveComponent, HooksWidget} from '../../libs/hook_widget/index'
+import ProjectModel from './ProjectModel'
 
 let store = null
 const Project = () => {
-  store = new ProjectStore();
-  return <StateComponent store={store} children={renderVIew}/>  
+  store = new ProjectModel();
+  return <LiveComponent liveModel={store} children={renderVIew}/>  
 };
 
 function renderVIew() {
@@ -22,7 +21,7 @@ function renderVIew() {
   return (
     <View style={styles.page}>
       <Header />
-      <DataWidget data={store.curDate} child={dateView}/>
+      <HooksWidget data={store.curDate} child={dateView}/>
       {dateView()}
     </View>
   );

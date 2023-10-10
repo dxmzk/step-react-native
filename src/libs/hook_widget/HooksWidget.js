@@ -1,29 +1,28 @@
 /**
  * Author: Meng
- * Date: 2023-
+ * Date: 2022-08-23
  * Desc: 
  */
 
-import React, { useEffect, useState } from "react"
+// eslint-disable-next-line
+import React, { useEffect, useState } from "react";
 
-const DataWidget = (props) => {
+const HooksWidget = (props) => {
   const data = props.data.value;
 
   const [value, setValue] = useState(data);
 
   useEffect(() => {
-
-    const datagram = props.data;
-
+    const liveData = props.data;
     // 这里可以对数据包装一下，主要是对错误兼容
-    datagram.bind((msg) => {
+    liveData.bind((msg) => {
       setValue(msg);
     });
 
-    return datagram.unbind;
+    return liveData.unbind;
   }, [props.data]);
 
   return props.child(value);
 }
 
-export default DataWidget;
+export default HooksWidget;

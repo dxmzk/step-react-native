@@ -5,11 +5,11 @@
  * Date: 2023-
  * Desc: 
  */
-import { Store, Datagram } from "../../libs/hooks_state/index"
+import { LiveModel, LiveData } from "../../libs/hook_widget/index"
 
-export default class ProjectStore extends Store {
+export default class ProjectModel extends LiveModel {
 
-  curDate = new Datagram(Date.now());
+  curDate = new LiveData(Date.now());
 
   onCreate(props) {
     console.log('===========> create: ProjectStore')

@@ -7,13 +7,13 @@
 import React from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 import { CompatButton } from '../../components';
-import { StateComponent, DataWidget} from '../../libs/hooks_state/index'
-import MyStore from './MyStore';
+import { LiveComponent, HooksWidget} from '../../libs/hook_widget/index'
+import MyModel from './MyModel';
 
-export default class My extends StateComponent {
+export default class My extends LiveComponent {
   constructor(props) {
     super(props);
-    this._store = new MyStore()
+    this.liveModel = new MyModel()
     this.state = {
       date: Date.now(),
     };
@@ -27,7 +27,7 @@ export default class My extends StateComponent {
     return (
       <View style={styles.container}>
         <Text>个人中心😯</Text>
-        <DataWidget data={this._store.curDate} child={this.dateView}/>
+        <HooksWidget data={this.liveModel.curDate} child={this.dateView}/>
         {this.dateView()}
       </View>
     );
@@ -35,7 +35,7 @@ export default class My extends StateComponent {
 
   dateView = (date) => {
     // const date = this.state.date;
-    return <CompatButton onPress={this._store.onchange}>
+    return <CompatButton onPress={this.liveModel.onchange}>
       <Text style={styles.date}>{date}</Text>
     </CompatButton>
   }
