@@ -1,4 +1,4 @@
-package com.meng.rncomponent;
+package com.azkbo.steprn;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

@@ -22,20 +22,8 @@ const rightBtns = [{name: '菜单', onPress: () => {}}];
 class Home extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      curNum: 3,
-    };
+    this.state = {};
   }
-
-  itemView = ({item, index}) => {
-    return (
-      <CompatButton
-        style={styles.item}
-        onPress={() => onItemPress(item, index)}>
-        <Text style={styles.text}>{item}</Text>
-      </CompatButton>
-    );
-  };
 
   onItemPress = (item, index) => {
     let path = '';
@@ -57,39 +45,31 @@ class Home extends React.PureComponent {
         break;
     }
     if (path) {
-      props.navigation.navigate({
+      this.props.navigation.navigate({
         name: path,
         params: {item},
       });
     }
   };
 
-  onStart = () => {
-    const timer = setTimeout(() => {
-      clearTimeout(timer);
-      const curNum = this.state.curNum - 1;
-      this.setState({curNum})
-      if (curNum > 0) {
-        this.onStart();
-      }
-    }, 1000);
-  };
-
   render() {
-    const {curNum} = this.state;
-
     return (
       <View style={styles.page}>
-        {/* <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns}/> */}
-        {/* <ListView style={styles.list} data={list} renderItem={itemView} /> */}
-        {curNum > 0 && <View style={styles.alertBox} onTouchEnd={this.onStart}>
-          <View style={styles.numBg}>
-            <Text style={styles.countText}>{curNum}</Text>
-          </View>
-        </View>}
+        <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} />
+        <ListView style={styles.list} data={list} renderItem={this.itemView} />
       </View>
     );
   }
+
+  itemView = ({item, index}) => {
+    return (
+      <CompatButton
+        style={styles.item}
+        onPress={() => this.onItemPress(item, index)}>
+        <Text style={styles.text}>{item}</Text>
+      </CompatButton>
+    );
+  };
 }
 
 const styles = StyleSheet.create({

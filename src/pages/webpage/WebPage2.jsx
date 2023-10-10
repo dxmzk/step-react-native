@@ -34,7 +34,7 @@ class WebPage extends PureComponent {
       canGoBack: false,
       barAlpha: 0,
       userAgentName: '',
-      hostUrl: 'https://cn.bing.com', // h5项目地址
+      hostUrl: 'https://dhstatic.bthome.com/appstore/test/landingpageStatic/index.html#/brickReplacement/upload', // h5项目地址
       webUrl: '', // 当前网站地址
     };
   }

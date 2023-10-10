@@ -40,7 +40,7 @@ export default class WebPage extends PureComponent {
       enableAplha: false,
       showShare: false,
       title: '',
-      tagUrl: 'http://192.168.253.54:8091', // h5项目地址
+      tagUrl: 'https://dhstatic.bthome.com/appstore/test/landingpageStatic/index.html#/spatialCase/case?fromPage=pad', // h5项目地址
       curUrl: '', // 当前网站地址
       headerConfig: {},
       shareData: { title: '', desc: '', image: '' },
@@ -58,10 +58,10 @@ export default class WebPage extends PureComponent {
       this._sendEvent({ event: emit_keys.app_route, data });
     });
 
-    const timer = setTimeout(() => {
-      clearTimeout(timer)
-      this._onWebMessage({ nativeEvent: { data: JSON.stringify({ event: 'share', params: '数据' }) } });
-    }, 3000)
+    // const timer = setTimeout(() => {
+    //   clearTimeout(timer)
+    //   this._onWebMessage({ nativeEvent: { data: JSON.stringify({ event: 'share', params: '数据' }) } });
+    // }, 3000)
 
   }
 
@@ -81,15 +81,22 @@ export default class WebPage extends PureComponent {
   _onLoadStart = res => {
     console.log('------> onLoadStart', res.nativeEvent);
   };
+
+  // // 加载 - 可做加载动画
+  // _onStateChange = res => {
+  //   console.log('------> onStateChange', res);
+  // };
   // 加载结束
   _onLoadEnd = res => {
-    if (res && res.nativeEvent) {
-      const curUrl = res.nativeEvent.url;
-      const title = res.nativeEvent.title;
-      const canGoBack = res.nativeEvent.canGoBack;
-      // const {url, title, canGoBack} = res.nativeEvent; // 结构会报错
+    const nativeEvent = res?.nativeEvent || {};
+    if (nativeEvent) {
+      const curUrl = nativeEvent.url;
+      const title = nativeEvent.title;
+      const canGoBack = nativeEvent.canGoBack;
+      // const {url, title, canGoBack} = nativeEvent; // 结构会报错
       this.setState({ title, canGoBack, curUrl });
-      // console.log(`_onLoadEnd: {title: ${title}, url: ${curUrl}}`);
+      // console.log(`_onLoadEnd: {back: ${canGoBack} title: ${title}, url: ${curUrl}}`);
+      console.log('--- onLoadEnd: ', canGoBack, nativeEvent);
     } else {
       console.warn(`------> onLoadEnd: ${res}`);
     }
@@ -108,6 +115,7 @@ export default class WebPage extends PureComponent {
   // 点击返回键
   onPressBack = () => {
     const canGoBack = this.state.canGoBack;
+    console.log('------> onPressBack: ', canGoBack);
     if (canGoBack && this.web_view) {
       this.web_view.goBack();
     } else {
@@ -118,7 +126,7 @@ export default class WebPage extends PureComponent {
   // 发送消息到web {event: 'your event type', data: 'return data', code: '状态：0成功', state: '要刷新的数据'}
   _sendEvent = (msgData) => {
     const newState = msgData.state; // state不为空表示需要刷新页面
-    if(typeof newState == 'object') {
+    if (typeof newState == 'object') {
       const pageState = this.state;
       for (const key in newState) {
         if (!Object.hasOwnProperty.call(pageState, key)) {
@@ -126,11 +134,11 @@ export default class WebPage extends PureComponent {
         }
       }
       this.setState(newState);
-    }else if(newState != null){
+    } else if (newState != null) {
       throw Error(`Illegal value type: state ------> ${newState}`);
     }
     if (this.web_view) {
-      if(newState) {
+      if (newState) {
         delete msgData.state;
       }
       // todo: 对格式做校验
@@ -153,7 +161,7 @@ export default class WebPage extends PureComponent {
       default:
         break;
     }
-    
+
     this._sendEvent(res);
   }
 
@@ -212,12 +220,13 @@ export default class WebPage extends PureComponent {
       <View style={styles.page}>
         <Header title={title} leftIcon={Images.left_b} rightBtns={rightBtns} onBack={this.onPressBack} />
         <WebView
-          ref={view => (this.web_view = view)}
+          ref={view => { this.web_view = view; }}
           style={styles.web}
           source={{ uri: tagUrl }}
           bounces={bounce}
           injectedJavaScript={injectedJavaScript}
           applicationNameForUserAgent={userAgentName}
+          // onNavigationStateChange={this._onStateChange}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           mediaPlaybackRequiresUserAction={false}
