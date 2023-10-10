@@ -8,6 +8,8 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Header, CompatButton, ListView} from '../../components/index';
 
+import CategoryBuy from './CategoryBuy';
+
 const list = [
   '自定义标题栏',
   'WebPage',
@@ -55,8 +57,9 @@ class Home extends React.PureComponent {
   render() {
     return (
       <View style={styles.page}>
-        <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} />
-        <ListView style={styles.list} data={list} renderItem={this.itemView} />
+        {/* <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} /> */}
+        {/* <ListView style={styles.list} data={list} renderItem={this.itemView} /> */}
+        <CategoryBuy />
       </View>
     );
   }
@@ -75,6 +78,7 @@ class Home extends React.PureComponent {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
+    paddingHorizontal: 16,
   },
   alertBox: {
     width: '100%',
