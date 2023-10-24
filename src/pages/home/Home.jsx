@@ -57,9 +57,9 @@ class Home extends React.PureComponent {
   render() {
     return (
       <View style={styles.page}>
-        {/* <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} /> */}
-        {/* <ListView style={styles.list} data={list} renderItem={this.itemView} /> */}
-        <CategoryBuy />
+        <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} />
+        <ListView style={styles.list} data={list} renderItem={this.itemView} />
+        {/* <CategoryBuy /> */}
       </View>
     );
   }
@@ -78,7 +78,7 @@ class Home extends React.PureComponent {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
   },
   alertBox: {
     width: '100%',
