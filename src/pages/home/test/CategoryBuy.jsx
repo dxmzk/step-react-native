@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 
 // import RetailImages from '../../../Assets/Retail/index';
-import {CompatButton} from '../../components/index';
+import {CompatButton} from '../../../components/index';
 
 const {width} = Dimensions.get('window');
 const boxWidth = width - 64 - 84;

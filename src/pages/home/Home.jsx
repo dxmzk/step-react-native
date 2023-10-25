@@ -8,7 +8,8 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Header, CompatButton, ListView} from '../../components/index';
 
-import CategoryBuy from './CategoryBuy';
+import CategoryBuy from './test/CategoryBuy';
+import GiftList from './test/GiftList';
 
 const list = [
   '自定义标题栏',
@@ -60,6 +61,7 @@ class Home extends React.PureComponent {
         <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} />
         <ListView style={styles.list} data={list} renderItem={this.itemView} />
         {/* <CategoryBuy /> */}
+        <GiftList />
       </View>
     );
   }
