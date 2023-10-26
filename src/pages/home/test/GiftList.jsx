@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFF3EB',
+    backgroundColor: '##FFF3EB',
   },
   flat: {
     maxHeight: 350,

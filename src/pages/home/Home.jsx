@@ -10,6 +10,7 @@ import {Header, CompatButton, ListView} from '../../components/index';
 
 import CategoryBuy from './test/CategoryBuy';
 import GiftList from './test/GiftList';
+import GiftRow from './test/GiftRow';
 
 const list = [
   '自定义标题栏',
@@ -59,9 +60,11 @@ class Home extends React.PureComponent {
     return (
       <View style={styles.page}>
         <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} />
-        <ListView style={styles.list} data={list} renderItem={this.itemView} />
+        {/* <ListView style={styles.list} data={list} renderItem={this.itemView} /> */}
         {/* <CategoryBuy /> */}
-        <GiftList />
+        {/* <GiftList /> */}
+        <Text style={styles.text}>打开看看</Text>
+        <GiftRow />
       </View>
     );
   }
