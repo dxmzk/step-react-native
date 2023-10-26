@@ -62,7 +62,7 @@ class Home extends React.PureComponent {
         <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} />
         {/* <ListView style={styles.list} data={list} renderItem={this.itemView} /> */}
         {/* <CategoryBuy /> */}
-        {/* <GiftList /> */}
+        <GiftList />
         <Text style={styles.text}>打开看看</Text>
         <GiftRow />
       </View>

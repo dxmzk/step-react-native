@@ -3,6 +3,13 @@
  * Date: 2023-10-24
  * Modify: 2023-10-24
  * Desc:
+ * 
+    {id: 1, title: '这个标题很长1很2', select: false, num: 9, price: 20},
+    {id: 2, title: '很长1很长', select: false, num: 5, price: 3.4},
+    {id: 3, title: '这会很长1很长2', select: false, num: 8, price: 3},
+    {id: 4, title: '这题会很长1长2', select: false, num: 7, price: 10.2},
+    {id: 5, title: '这个题很长1很长2', select: false, num: 3, price: 9.99},
+    {id: 6, title: '这个标题长1长2', select: false, num: 2, price: 2.29},
  */
 import React, {useEffect, useState} from 'react';
 import {
@@ -10,7 +17,7 @@ import {
   Text,
   Image,
   Modal,
-  FlatList,
+  ScrollView,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
@@ -24,44 +31,96 @@ export default function GiftList(props) {
   });
   const [goodsList, setGoodsList] = useState([
     {
-      id: 0,
-      title: '这个标题会很长1很长2很长3很长4很长5很长6',
-      select: false,
-      num: 1,
-      price: 23.4,
+      activityId: 1,
+      activityName: 'mock满减活动1',
+      giftItemInfoVOList: [
+        {
+          sapSkuNo: '1527466',
+          productName: '兔宝宝杉木细木工板1220*2440*18E0',
+          unitCode: 'ST',
+          activityId: 1,
+          price: 0,
+          activityName: 'mock满减活动1',
+          productThumbPic: '',
+        },
+      ],
     },
-    {id: 1, title: '这个标题很长1很2', select: false, num: 9, price: 20},
-    {id: 2, title: '很长1很长', select: false, num: 5, price: 3.4},
-    {id: 3, title: '这会很长1很长2', select: false, num: 8, price: 3},
-    {id: 4, title: '这题会很长1长2', select: false, num: 7, price: 10.2},
-    {id: 5, title: '这个题很长1很长2', select: false, num: 3, price: 9.99},
-    {id: 6, title: '这个标题长1长2', select: false, num: 2, price: 2.29},
+    {
+      activityId: 2,
+      shopCode: null,
+      activityName: 'mock满减活动2',
+      giftItemInfoVOList: [
+        {
+          sapSkuNo: '9998008',
+          productName: '强化地板安装费',
+          unitCode: 'M2',
+          activityId: 2,
+          price: 0,
+          activityName: 'mock满减活动2',
+          productThumbPic: '',
+        },
+      ],
+    },
   ]);
 
   useEffect(() => {}, []);
 
+  function onChange(list) {
+    if (props.onChange) {
+      props.onChange(list);
+    }
+  }
+
+  function onClose() {
+    onChange(null);
+  }
+
+  function onConfirm() {
+    const list = [];
+    goodsList.forEach(activity => {
+      const goods = activity.giftItemInfoVOList || [];
+      goods.forEach(e => {
+        if(e.select) {
+          list.push({
+            sapSkuCode: e.sapSkuNo,
+            unitCode: e.unitCode,
+            selectedQuantity: e.maxQuantity,
+            activityId: e.activityId
+          });
+        }
+      })
+    });
+    onChange(list);
+  }
+
   function onCheckItem(item) {
     const list = goodsList.filter(e => e.select);
-    if (list.length < discount.useNum || (list.length == discount.useNum && item.select)) {
+    if (
+      list.length < discount.useNum ||
+      (list.length == discount.useNum && item.select)
+    ) {
       item.select = !item.select;
       setGoodsList([].concat(goodsList));
       let use = false;
       let num = 0;
       let totalAmount = 0;
       goodsList.forEach(e => {
-        if (e.select) {
-          totalAmount += e.price;
-          num += 1;
-          use = totalAmount >= discount.amount;
-        }
+        const goods = e.giftItemInfoVOList || [];
+        goods.forEach(g => {
+          if (g.select) {
+            // totalAmount += e.price;
+            num += 1;
+            // use = totalAmount >= discount.amount;
+          }
+        });
       });
-      setDiscount({...discount, use, num});
+      setDiscount({ ...discount, use, num });
     }
   }
 
-  function goodsView({item}) {
+  function goodsView(item, index) {
     return (
-      <View key={item.id} style={styles.itemView}>
+      <View key={item.id||index} style={styles.itemView}>
         <TouchableOpacity
           style={styles.checkBox}
           activeOpacity={0.7}
@@ -71,20 +130,32 @@ export default function GiftList(props) {
         <Image style={styles.itemImg} />
         <View style={styles.itemInfo}>
           <Text style={styles.itemTitle} numberOfLines={1} ellipsizeMode="tail">
-            {item.title}
+            {item.productName}
           </Text>
-          <Text style={styles.itemNum}>x{item.num}</Text>
+          <Text style={styles.itemNum}>x{item.maxQuantity||1}</Text>
           <View style={styles.itemRow}>
             <Text style={styles.priceBox}>
-              <Text style={styles.itemUnit}>¥</Text>
+              <Text style={styles.itemUnit}>¥ </Text>
               <Text style={styles.itemPrice}>{item.price}</Text>
             </Text>
             <Text style={styles.priceBox2}>
-              <Text>¥</Text>
+              <Text>¥ </Text>
               <Text style={styles.itemPrice2}>23.34</Text>
             </Text>
           </View>
         </View>
+      </View>
+    );
+  }
+
+  function activityView(item) {
+    const list = item.giftItemInfoVOList || [];
+    return (
+      <View key={item.activityId}>
+        <View style={styles.activityBox}>
+          <Text style={styles.amount}>{item.activityName}</Text>
+        </View>
+        {list.map(goodsView)}
       </View>
     );
   }
@@ -96,7 +167,9 @@ export default function GiftList(props) {
           <View style={styles.titleBox}>
             <View style={styles.closeIc} />
             <Text style={styles.title}>圣诞快乐</Text>
-            <View style={styles.closeIc} />
+            <TouchableOpacity activeOpacity={0.8} onPress={onClose}>
+              <View style={styles.closeIc} />
+            </TouchableOpacity>
           </View>
           <Text style={styles.hintBox}>
             <Text>{discount.use ? '已满' : '未满足'}</Text>
@@ -109,26 +182,20 @@ export default function GiftList(props) {
             <Text style={styles.amount}>{discount.num}</Text>
             <Text>种</Text>
           </Text>
-          <View style={styles.alertBox}>
-            <Text style={styles.amount}>
-              满{discount.amount.toFixed(2)}元可领
-            </Text>
-          </View>
-          <FlatList
-            style={styles.flat}
-            data={goodsList}
-            renderItem={goodsView}
-            ItemSeparatorComponent={<View style={styles.listLine} />}
-          />
+
+          <ScrollView style={styles.flat}>
+            {goodsList.map(activityView)}
+          </ScrollView>
+
           <View style={styles.alertInfoBox}>
             <View style={styles.alertIc} />
             <Text style={styles.alertInfo}>
               如果在支付时，交易金额或者赠品活动有变化，则以实际赠品订单为准。
             </Text>
           </View>
-          <View style={styles.btnBox}>
+          <TouchableOpacity style={styles.btnBox} activeOpacity={0.8} onPress={onConfirm}>
             <Text style={styles.btnStr}>确 定</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -181,14 +248,15 @@ const styles = StyleSheet.create({
   amount: {
     color: '#FF6600',
     fontWeight: '700',
+    fontSize: 14,
   },
-  alertBox: {
+  activityBox: {
     height: 32,
     borderRadius: 4,
     marginHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '##FFF3EB',
+    backgroundColor: '#FFF3EB',
   },
   flat: {
     maxHeight: 350,
@@ -260,6 +328,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 20,
     marginLeft: 16,
+    textDecorationLine: 'line-through'
   },
   itemPrice2: {
     fontSize: 14,
