@@ -30,38 +30,87 @@ export default function GiftList(props) {
     num: 0,
   });
   const [goodsList, setGoodsList] = useState([
-    {
-      activityId: 1,
-      activityName: 'mock满减活动1',
-      giftItemInfoVOList: [
-        {
-          sapSkuNo: '1527466',
-          productName: '兔宝宝杉木细木工板1220*2440*18E0',
-          unitCode: 'ST',
-          activityId: 1,
-          price: 0,
-          activityName: 'mock满减活动1',
-          productThumbPic: '',
-        },
-      ],
-    },
-    {
-      activityId: 2,
-      shopCode: null,
-      activityName: 'mock满减活动2',
-      giftItemInfoVOList: [
-        {
-          sapSkuNo: '9998008',
-          productName: '强化地板安装费',
-          unitCode: 'M2',
-          activityId: 2,
-          price: 0,
-          activityName: 'mock满减活动2',
-          productThumbPic: '',
-        },
-      ],
-    },
-  ]);
+      {
+        activityId: 1,
+        activityName: 'mock满减活动1',
+        giftItemInfoVOList: [
+          {
+            sapSkuNo: '1527466',
+            productName: '兔宝宝杉木细木工板1220*2440*18E0',
+            unitCode: 'ST',
+            activityId: 1,
+            price: 1000,
+            activityName: 'mock满减活动1',
+            productThumbPic: '',
+          },
+          {
+            sapSkuNo: '9998009',
+            productName: '实木复合地板安装费',
+            unitCode: 'M2',
+            activityId: 1,
+            price: 1000,
+            activityName: 'mock满减活动1',
+            productThumbPic:
+              'https://res1.bnq.com.cn/Fj60emm2FTalSZl49KgSZ6QwFajO',
+          },
+          {
+            sapSkuNo: '9998009',
+            productName: '实木复合地板安装费',
+            unitCode: 'M2',
+            activityId: 1,
+            price: 1000,
+            activityName: 'mock满减活动1',
+            productThumbPic:
+              'https://res1.bnq.com.cn/Fj60emm2FTalSZl49KgSZ6QwFajO',
+          },
+          {
+            sapSkuNo: '9998009',
+            productName: '实木复合地板安装费',
+            unitCode: 'M2',
+            activityId: 1,
+            price: 1000,
+            activityName: 'mock满减活动1',
+            productThumbPic:
+              'https://res1.bnq.com.cn/Fj60emm2FTalSZl49KgSZ6QwFajO',
+          },
+          {
+            sapSkuNo: '9998009',
+            productName: '实木复合地板安装费',
+            unitCode: 'M2',
+            activityId: 1,
+            price: 1000,
+            activityName: 'mock满减活动1',
+            productThumbPic:
+              'https://res1.bnq.com.cn/Fj60emm2FTalSZl49KgSZ6QwFajO',
+          },
+          {
+            sapSkuNo: '9998009',
+            productName: '实木复合地板安装费',
+            unitCode: 'M2',
+            activityId: 1,
+            price: 1000,
+            activityName: 'mock满减活动1',
+            productThumbPic:
+              'https://res1.bnq.com.cn/Fj60emm2FTalSZl49KgSZ6QwFajO',
+          },
+        ],
+      },
+      {
+        activityId: 2,
+        activityName: 'mock满减活动2',
+        giftItemInfoVOList: [
+          {
+            sapSkuNo: '9998008',
+            productName: '强化地板安装费',
+            unitCode: 'M2',
+            activityId: 2,
+            price: 150,
+            activityName: 'mock满减活动2',
+            productThumbPic: '',
+          },
+        ],
+      },
+    ]);
 
   useEffect(() => {}, []);
 
@@ -80,15 +129,15 @@ export default function GiftList(props) {
     goodsList.forEach(activity => {
       const goods = activity.giftItemInfoVOList || [];
       goods.forEach(e => {
-        if(e.select) {
+        if (e.select) {
           list.push({
             sapSkuCode: e.sapSkuNo,
             unitCode: e.unitCode,
             selectedQuantity: e.maxQuantity,
-            activityId: e.activityId
+            activityId: e.activityId,
           });
         }
-      })
+      });
     });
     onChange(list);
   }
@@ -114,25 +163,26 @@ export default function GiftList(props) {
           }
         });
       });
-      setDiscount({ ...discount, use, num });
+      setDiscount({...discount, use, num});
     }
   }
 
   function goodsView(item, index) {
+    const imgUrl = item.productThumbPic || '';
     return (
-      <View key={item.id||index} style={styles.itemView}>
+      <View key={item.id || index} style={styles.itemView}>
         <TouchableOpacity
           style={styles.checkBox}
           activeOpacity={0.7}
           onPress={() => onCheckItem(item)}>
           <Image style={item.select ? styles.checkIc2 : styles.checkIc} />
         </TouchableOpacity>
-        <Image style={styles.itemImg} />
+        <Image style={styles.itemImg} source={{uri: imgUrl}}/>
         <View style={styles.itemInfo}>
           <Text style={styles.itemTitle} numberOfLines={1} ellipsizeMode="tail">
             {item.productName}
           </Text>
-          <Text style={styles.itemNum}>x{item.maxQuantity||1}</Text>
+          <Text style={styles.itemNum}>x{item.maxQuantity || 1}</Text>
           <View style={styles.itemRow}>
             <Text style={styles.priceBox}>
               <Text style={styles.itemUnit}>¥ </Text>
@@ -193,7 +243,10 @@ export default function GiftList(props) {
               如果在支付时，交易金额或者赠品活动有变化，则以实际赠品订单为准。
             </Text>
           </View>
-          <TouchableOpacity style={styles.btnBox} activeOpacity={0.8} onPress={onConfirm}>
+          <TouchableOpacity
+            style={styles.btnBox}
+            activeOpacity={0.8}
+            onPress={onConfirm}>
             <Text style={styles.btnStr}>确 定</Text>
           </TouchableOpacity>
         </View>
@@ -328,7 +381,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 20,
     marginLeft: 16,
-    textDecorationLine: 'line-through'
+    textDecorationLine: 'line-through',
   },
   itemPrice2: {
     fontSize: 14,
