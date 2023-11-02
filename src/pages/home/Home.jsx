@@ -8,9 +8,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Header, CompatButton, ListView} from '../../components/index';
 
-import CategoryBuy from './test/CategoryBuy';
-import GiftList from './test/GiftList';
-import GiftRow from './test/GiftRow';
+import StaffChoose from './test/StaffChoose';
 
 const list = [
   '自定义标题栏',
@@ -42,11 +40,6 @@ class Home extends React.PureComponent {
       case 2:
         path = '';
         break;
-      case 3:
-        path = '';
-        break;
-      case 10:
-        break;
     }
     if (path) {
       this.props.navigation.navigate({
@@ -62,9 +55,7 @@ class Home extends React.PureComponent {
         <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} />
         {/* <ListView style={styles.list} data={list} renderItem={this.itemView} /> */}
         {/* <CategoryBuy /> */}
-        <GiftList />
-        <Text style={styles.text}>打开看看</Text>
-        <GiftRow />
+        <StaffChoose />
       </View>
     );
   }
