@@ -19,6 +19,10 @@ export default class StaffChoose extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    // 获取默认值
+  }
+
   onChangeTab = tabIndex => {
     this.setState({tabIndex});
   };
@@ -160,16 +164,12 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     minWidth: 20,
-    paddingLeft: 8,
-    paddingVertical: 16,
     backgroundColor: '#232323',
   },
   checkIc2: {
     width: 20,
     height: 20,
     minWidth: 20,
-    paddingLeft: 8,
-    paddingVertical: 16,
     borderColor: '#323232',
     borderWidth: 1,
   },
