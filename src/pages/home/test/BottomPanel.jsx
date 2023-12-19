@@ -36,7 +36,7 @@ let List3 = [
   {id: 9, value: '睥睨哦', group: '说的', select: false},
 ];
 
-function ChooseUser(props, ref) {
+function BottomPanel(props, ref) {
   //
   useImperativeHandle(ref, refMethod, []);
 
@@ -46,7 +46,6 @@ function ChooseUser(props, ref) {
 
   //
   const [visible, setVisible] = useState(false);
-  const [userList, setUserList] = useState(List3);
 
   function refMethod() {
     return {
@@ -60,27 +59,11 @@ function ChooseUser(props, ref) {
   }
 
   function onCommit() {
-    const list = userList.filter(e => e.select);
-    console.log(list);
-    if (props.onChange) {
-      props.onChange();
-    }
     setVisible(false);
   }
 
-  // 选择人员
-  function onChooseUser(item) {
-    item.select = !item.select;
-    setUserList(userList.concat([]));
-  }
 
-  function onSearchName(key) {
-    console.log(key);
-    const list = List3.filter(e => e.value.indexOf(key) > -1);
-    setUserList(list);
-  }
-
-  function staffView({item, index}) {
+  function itemView({item, index}) {
     const checkIc = item.select ? styles.checkIc : styles.checkIc2;
     return (
       <TouchableOpacity
@@ -97,48 +80,22 @@ function ChooseUser(props, ref) {
   }
 
   return (
-    <Modal animationType="slide" visible={visible} transparent={true}>
+    <Modal animationType="fade" visible={visible} transparent={true}>
       <View style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.title}>选择需要@的人</Text>
+          <Text style={styles.title}>助手面板</Text>
           <TouchableOpacity
             style={styles.close}
             onPress={() => setVisible(false)}>
             <Image style={styles.closeIc} />
           </TouchableOpacity>
         </View>
-        <View style={styles.search}>
-          <View style={styles.input}>
-            <Image style={styles.searchIc} />
-            <TextInput
-              style={styles.inputStr}
-              maxLength={20}
-              placeholderTextColor="#979797"
-              placeholder="输入姓名模糊搜索"
-              onChangeText={onSearchName}
-            />
-          </View>
-        </View>
         <FlatList
           style={styles.flat}
           data={userList}
-          renderItem={staffView}
+          renderItem={itemView}
           ItemSeparatorComponent={<View style={styles.flatLine} />}
         />
-        <View style={styles.footer}>
-          <TouchableOpacity
-            style={styles.btn}
-            activeOpacity={0.8}
-            onPress={() => setVisible(false)}>
-            <Text style={styles.cancel}>取消</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btn}
-            activeOpacity={0.8}
-            onPress={onCommit}>
-            <Text style={styles.ok}>提交</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </Modal>
   );
@@ -183,30 +140,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#F2F3F5',
   },
-  search: {
-    paddingTop: 8,
-    paddingHorizontal: 16,
-    backgroundColor: 'white',
-  },
-  searchIc: {
-    width: 16,
-    height: 16,
-    marginLeft: 12,
-    marginRight: 8,
-    backgroundColor: '#e3e3e3',
-  },
-  input: {
-    height: 44,
-    borderRadius: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F2F3F5',
-  },
-  inputStr: {
-    color: '#232323',
-    fontSize: 14,
-    flex: 1,
-  },
+  
   flat: {
     maxHeight: '64%',
     paddingHorizontal: 20,
@@ -260,35 +194,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 
-  footer: {
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-  },
-  btn: {
-    flex: 1,
-    marginHorizontal: 6,
-  },
-  cancel: {
-    height: 38,
-    lineHeight: 38,
-    textAlign: 'center',
-    color: '#3478F6',
-    fontSize: 15,
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: '#3478F6',
-  },
-  ok: {
-    height: 40,
-    lineHeight: 40,
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 15,
-    borderRadius: 4,
-    backgroundColor: '#3478F6',
-  },
 });
 
-export default forwardRef(ChooseUser);
+export default forwardRef(BottomPanel);
