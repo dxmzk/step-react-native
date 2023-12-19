@@ -8,8 +8,6 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Header, CompatButton, ListView} from '../../components/index';
 
-import StaffChoose from './test/StaffChoose';
-
 const list = [
   '自定义标题栏',
   'WebPage',
@@ -25,6 +23,14 @@ class Home extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    const timer = setTimeout(() => {
+      this.props.navigation.navigate({
+        name: 'AddRecord',
+      });
+    }, 1000);
   }
 
   onItemPress = (item, index) => {
@@ -53,9 +59,8 @@ class Home extends React.PureComponent {
     return (
       <View style={styles.page}>
         <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} />
-        {/* <ListView style={styles.list} data={list} renderItem={this.itemView} /> */}
+        <ListView style={styles.list} data={list} renderItem={this.itemView} />
         {/* <CategoryBuy /> */}
-        <StaffChoose />
       </View>
     );
   }
