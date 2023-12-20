@@ -7,6 +7,7 @@
 
 import React, {
   useState,
+  useRef,
   useEffect,
   forwardRef,
   useImperativeHandle,
@@ -22,36 +23,26 @@ import {
   StyleSheet,
 } from 'react-native';
 
-let List3 = [
-  {id: 0, value: '觉得就卡', group: '二部经理', select: false},
-  {id: 1, value: '啊是放', group: '啊啥', select: false},
-  {id: 2, value: '啊是', group: '二部经理', select: false},
-  {id: 3, value: '啊啥的', group: '啊思考', select: false},
-  {id: 4, value: '啊哦哦', group: '测试', select: false},
-  {id: 5, value: '哦看看', group: '哦哎', select: false},
-  {id: 5, value: '你好好', group: '开发', select: false},
-  {id: 6, value: '柔软', group: '算法', select: false},
-  {id: 7, value: '是的风', group: '阿斯顿', select: false},
-  {id: 8, value: '是滴哦', group: '啊啥', select: false},
-  {id: 9, value: '睥睨哦', group: '说的', select: false},
-];
-
 function ChooseUser(props, ref) {
   //
   useImperativeHandle(ref, refMethod, []);
 
-  useEffect(() => {
-    // 回显
-  }, [props.data]);
+  useEffect(() => {}, []);
 
   //
   const [visible, setVisible] = useState(false);
-  const [userList, setUserList] = useState(List3);
+  const [userList, setUserList] = useState([]);
+
+  const callRef = useRef(null);
+  const listRef = useRef([]);
 
   function refMethod() {
     return {
-      show() {
+      show(list, callback) {
+        setUserList(list);
         setVisible(true);
+        listRef.current = list;
+        callRef.current = callback;
       },
       hide() {
         setVisible(false);
@@ -63,7 +54,10 @@ function ChooseUser(props, ref) {
     const list = userList.filter(e => e.select);
     console.log(list);
     if (props.onChange) {
-      props.onChange();
+      props.onChange(list);
+    }
+    if (callRef.current) {
+      callRef.current(list);
     }
     setVisible(false);
   }
@@ -76,7 +70,8 @@ function ChooseUser(props, ref) {
 
   function onSearchName(key) {
     console.log(key);
-    const list = List3.filter(e => e.value.indexOf(key) > -1);
+    const propsData = listRef.current || [];
+    const list = propsData.filter(e => e.value.indexOf(key) > -1);
     setUserList(list);
   }
 
@@ -184,7 +179,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F3F5',
   },
   search: {
-    paddingTop: 8,
+    paddingVertical: 8,
     paddingHorizontal: 16,
     backgroundColor: 'white',
   },
@@ -208,7 +203,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   flat: {
-    maxHeight: '64%',
+    maxHeight: '60%',
     paddingHorizontal: 20,
     backgroundColor: 'white',
   },
