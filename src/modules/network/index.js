@@ -54,8 +54,50 @@ function _parseData(res, result) {
 }
 
 // 
-function _parseErr(err, result) {
-  console.log(err);
+function _parseErr(res, result) {
+  // console.log(err);
+  let code = res.code, message = '', url = '', status = -1;
+  const reqInfo = res.request || {};
+
+  if (printLog) {
+    url = reqInfo.responseURL || reqInfo._url;
+    const param = reqInfo.__sentry_xhr__?.body || {};
+    const header = reqInfo._headers || {};
+    header.method = reqInfo.__sentry_xhr__?.method || 'GET';
+
+    console.log('------> error request info:', reqInfo || res);
+    console.log(`------> error request status: ${reqInfo.status}, code: ${code}, url: ${url}`);
+    addNetLog(url, 100, param, { status: reqInfo.status, code }, header);
+  }
+
+  if (reqInfo) {
+    code = (code || '').toLowerCase();
+    status = reqInfo.status;
+    url = reqInfo.responseURL || reqInfo._url;
+    switch (status) {
+      case 0:
+        status = -1;
+        message = `${code == 'econnaborted' ? '请求超时' : '网络异常'}，请重新连接`;
+        break;
+      case 404:
+        message = '请求地址不存在'
+        break;
+      case 405:
+        message = '请求方式错误，请联系开发人员'
+        break;
+      case 500:
+      case 502:
+        message = '服务重启中, 请稍后'
+        break;
+      case 504:
+        message = '网关连接超时, 请稍后'
+        break;
+      default:
+        message = `抱歉, 请求失败:${status}`
+        break;
+    }
+  }
+  return { code: status, message, url };
 }
 
 function _showLoading(show, text = '加载中...') {

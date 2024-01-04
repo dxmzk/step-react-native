@@ -3,6 +3,8 @@
  * Date: 2022-03-03
  * Desc: 
  */
+import { Platform } from 'react-native';
+import RNFS from 'react-native-fs';
 
 const uploadHost = '';
 
@@ -40,7 +42,7 @@ export function uploadImg(file = '') {
 
     const body = new FormData();
     body.append('name', 'file');
-    body.append('bucket', 'bajanju-p');
+    body.append('bucket', 'b-p');
     body.append("file", { uri: file, type: 'multipart/form-data', name: 'file' }, fileName);
     // body.append("uploadFile", { uri: file, type: 'multipart/form-data', name: 'uploadFile' }, fileName);
     // body.append("photo", file, fileName);
@@ -68,4 +70,71 @@ export function uploadImg(file = '') {
         resolve({ code: -1002, data: null });
       });
   });
+}
+
+// 文件下载 注：此处未做权限判断
+export async function download(url, name, path) {
+  console.log(url, name, path);
+
+  let savePath = '';
+
+  if (Platform.OS === 'ios') {
+    savePath = `${RNFS.DocumentDirectoryPath}`;
+  } else {
+    savePath = `${RNFS.DownloadDirectoryPath}/${path || 'BTHome'}`;
+  }
+  const exists = await RNFS.exists(savePath);
+  if (!exists) {
+    RNFS.mkdir(savePath);
+  }
+  let fileType = '';
+  if(url && url.includes('/')) {
+    const lastStr = url.substring(url.lastIndexOf('/') + 1);
+    if(lastStr.includes('.') && !name.includes('.')) {
+      fileType = lastStr.substring(lastStr.lastIndexOf('.'));
+    }
+    // console.log('-------------> fileType', fileType);
+  }
+
+  return new Promise((resolve) => {
+    const downloadDest = `${savePath}/${name}${fileType}`;
+    const options = {
+      fromUrl: url,
+      toFile: downloadDest,
+      background: true,
+      headers: { 'cookie': 'info.token' || '' },
+      begin: (res) => {
+        console.log('=======> 下载文件开始 begin');
+        console.log(res.contentLength);
+      },
+      progress: (res) => { }
+    };
+    const ret = RNFS.downloadFile(options);
+    ret.promise.then(res => {
+      if (Platform.OS === 'ios') {
+        // Toast.showShortCenter('导出文件成功，请在“文件app”中查看')
+      } else {
+        let alert = downloadDest;
+        if (downloadDest.indexOf('0') > -1) {
+          alert = downloadDest.split('0/')[1];
+        }
+        // Toast.showShortCenter('文件下载成功!  路径：' + alert);
+      }
+      console.log('=======> 下载文件成功 success');
+      console.log(res, downloadDest);
+      resolve({
+        code: res.statusCode,
+        data: downloadDest,
+        msg: '文件下载成功',
+      })
+    }).catch(err => {
+      console.log('=======> 下载文件失败 catch');
+      console.log(err);
+      resolve({
+        status: -1,
+        data: null,
+        msg: '文件下载失败'
+      })
+    });
+  })
 }
