@@ -28,7 +28,7 @@ class Home extends React.PureComponent {
   componentDidMount() {
     const timer = setTimeout(() => {
       this.props.navigation.navigate({
-        name: 'AddRecord',
+        name: 'RetailSalesData',
       });
     }, 1000);
   }

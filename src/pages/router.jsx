@@ -9,6 +9,7 @@ import BottomTabStack from './BottomTabStack';
 
 import {NewProject, WebPage, TestPage} from './index';
 import AddRecord from './home/test/AddRecord';
+import RetailSalesData from './home/test/RetailSalesData';
 
 const StackView = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ const AppStackNavigator = () => {
       <StackView.Screen name="WebPage" component={WebPage} />
       <StackView.Screen name="TestPage" component={TestPage} />
       <StackView.Screen name="AddRecord" component={AddRecord} />
+      <StackView.Screen name="RetailSalesData" component={RetailSalesData} />
     </StackView.Navigator>
   );
 };
