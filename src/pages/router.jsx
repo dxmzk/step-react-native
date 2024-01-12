@@ -11,6 +11,8 @@ import {NewProject, WebPage, TestPage} from './index';
 import AddRecord from './home/test/AddRecord';
 import RetailSalesData from './home/test/RetailSalesData';
 
+import AnimatedClass from './project/Animated';
+
 const StackView = createNativeStackNavigator();
 
 const AppStackNavigator = () => {
@@ -28,6 +30,7 @@ const AppStackNavigator = () => {
       <StackView.Screen name="TestPage" component={TestPage} />
       <StackView.Screen name="AddRecord" component={AddRecord} />
       <StackView.Screen name="RetailSalesData" component={RetailSalesData} />
+      <StackView.Screen name="AnimatedClass" component={AnimatedClass} />
     </StackView.Navigator>
   );
 };

@@ -28,7 +28,7 @@ class Home extends React.PureComponent {
   componentDidMount() {
     const timer = setTimeout(() => {
       this.props.navigation.navigate({
-        name: 'RetailSalesData',
+        name: 'AnimatedClass',
       });
     }, 1000);
   }
