@@ -1,13 +1,15 @@
 /**
  * Author: Meng
- * Date: 2021-09-27
- * Desc:
+ * Date: 2024-08-10
+ * Desc: 底部导航栏
  */
  import React from 'react';
  import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
- import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
  
- import { Home, Project, My } from './index';
+ import Home from './home/Home';
+ import Project from './project/Project';
+ import My from './my/My';
  
  const Tab = createBottomTabNavigator();
  

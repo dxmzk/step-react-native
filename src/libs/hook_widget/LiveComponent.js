@@ -1,6 +1,6 @@
 /**
  * Author: Meng
- * Date: 2022-08-23
+ * Date: 2024-08-10
  * Desc: 基础组件
  */
 
@@ -65,14 +65,14 @@ export default class LiveComponent extends React.Component {
   }
 
   render() {
-    const children = this.props.children;
+    const childrenRender = this.props.render;
 
-    if (typeof children == 'function') {
+    if (childrenRender) {
       // 函数式组件
-      return children();
+      return childrenRender(this._liveModel);
     } else {
       // 类组件
-      return children;
+      return this.props.children;
     }
   }
 }

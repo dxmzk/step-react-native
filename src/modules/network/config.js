@@ -1,36 +1,64 @@
 /**
  * Author: Meng
- * Date: 2022-03
+ * Date: 2024-08-10
  * Desc: 请求配置
  */
-import app_config from '../constant/index'
+import configs from '../../config/index';
+import {DEVICE, ACCOUNT} from '../../config/constants';
 
-// 常量配置
-// export const net_config = {env: app_config.def_env}
-
-export function getRequestHost(host='def', env=app_config.env) {
-  return env_hosts[env][host];
+let userAuth = ''; // 用户认证信息
+/**
+ * 获取环境域名
+ * @param {*} tag 域名标签
+ * @param {*} env 环境
+ * @returns
+ */
+export function getTagDomain(tag = 'api', env) {
+  return env_domain[env || configs.env][tag];
 }
 
-export function mergeParams(params={}) {
-
+/**
+ * 合并请求参数
+ * @param {*} params
+ * @returns
+ */
+export function mergeParams(params = {}) {
   return params;
 }
 
-export function mergeHeaders(headers={}) {
-  headers['Content-Type'] = 'application/json;charset=utf-8'
-  return headers;
+/**
+ * 合并请求头
+ * @param {*} headers
+ * @returns
+ */
+export function mergeHeaders(headers = {}) {
+  // headers['Content-Type'] = 'application/json;charset=utf-8'
+  const token = ACCOUNT.token;
+  if (!userAuth) {
+    userAuth = JSON.stringify(DEVICE);
+  }
+  return {
+    token,
+    userAuth,
+    ...headers,
+  };
 }
 
-const env_hosts =  {
+// 环境域名
+const env_domain = {
   prod: {
-    def: 'http://def.com',
+    api: 'http://def.com',
     auth: 'http://auth.com',
     order: 'http://order.com',
   },
   test: {
-    def: 'http://def-test.com',
+    api: 'http://def-test.com',
     auth: 'http://auth-test.com',
     order: 'http://order-test.com',
-  }
-}
+  },
+  dev: {
+    api: 'http://def-test.com',
+    auth: 'http://auth-test.com',
+    order: 'http://order-test.com',
+  },
+};

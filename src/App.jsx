@@ -1,14 +1,17 @@
 /**
  * Author: Meng
- * Date: 2021-09-27
- * Desc:
+ * Date: 2024-08-10
+ * Desc: App 入口
  */
 
 import React from 'react';
 import {DeviceEventEmitter} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 
-import AppStackNavigator from './pages/router.jsx';
+import AppStackNavigator from './pages/router';
+import DebugBox from './pages/debug/DebugBox';
+import AppLoading from './pages/widget/Loading';
+import HintModel from './pages/widget/HintModel';
 
 // 获取 route 信息
 function getRoute(route) {
@@ -24,11 +27,14 @@ const App = () => {
     <NavigationContainer
       onStateChange={state => {
         const route = getRoute(state.routes[state.index]);
-        console.log('App.js Log:', route);
+        console.log('App onStateChange Log:', route);
         delete route.params;
         DeviceEventEmitter.emit('app_route_change', route);
       }}>
       <AppStackNavigator />
+      <DebugBox />
+      <AppLoading />
+      <HintModel />
     </NavigationContainer>
   );
 };

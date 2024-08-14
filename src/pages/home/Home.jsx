@@ -1,17 +1,17 @@
 /**
  * Author: Meng
- * Date: 2021-09-27
+ * Date: 2024-08-10
  * Desc:
  */
 
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {Header, CompatButton, ListView} from '../../components/index';
 
-import CategoryBuy from './CategoryBuy';
+import {Header, CompatButton, ListView} from '../../components/index';
+import {example} from '../../modules/apis/index';
 
 const list = [
-  '自定义标题栏',
+  '调试面板',
   'WebPage',
   'Charbar(字母索引)',
   'MoveView',
@@ -27,6 +27,8 @@ class Home extends React.PureComponent {
     this.state = {};
   }
 
+  componentDidMount() {}
+
   onItemPress = (item, index) => {
     let path = '';
 
@@ -40,24 +42,26 @@ class Home extends React.PureComponent {
       case 2:
         path = '';
         break;
-      case 3:
-        path = '';
-        break;
-      case 10:
-        break;
     }
     if (path) {
       this.props.navigation.navigate({
         name: path,
         params: {item},
       });
+    }else {
+      this.openPicker();
     }
+  };
+
+  openPicker = () => {
+    console.log('openPicker');
+    example();
   };
 
   render() {
     return (
       <View style={styles.page}>
-        <Header title="知之学吧 很长很长很长的标题" rightBtns={rightBtns} />
+        <Header title="很长很长很长的标题" rightBtns={rightBtns} />
         <ListView style={styles.list} data={list} renderItem={this.itemView} />
         {/* <CategoryBuy /> */}
       </View>

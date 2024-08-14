@@ -1,184 +1,192 @@
 /**
  * Author: Meng
- * Date: 2021-09-27
- * Desc:
+ * Date: 2024-08-10
+ * Desc: 选择日期picker
+ * 
+ * unit     显示单位
+ * label    取值的key
+ * index    默认选中项
+ * items    数据列表
+ * onChange 回调函数
  */
 
-import React, { useState } from 'react';
-import {
-  ScrollView,
-  View,
-  Text,
-  Dimensions,
-} from 'react-native';
+import React from 'react';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 
-// interface Props {
-//   key?: string;
-//   testID?: string;
-//   // style?: object;
-//   width?: number; // 宽度
-//   row?: number; // 宽度的百分比（列数）
-//   // column?: number; // 行数
-//   // height?: number; // 高度
-//   value?: any; // 默认值
-//   data?: any[];
-//   onChange?: (index: number, e: any) => void;
-//   scrollStyle?: object;
-//   onPress?: any;
-//   selectTextStyle?: object;
-// }
+const item_height = 36;
+let row_num = 3; // 显示列数 -可设置在props中(赖)
+export default class Picker extends React.Component {
+  _scrollView = null;
+  _isScroll = false;
 
-const { width } = Dimensions.get('window');
+  constructor(props) {
+    super(props);
 
-const Picker = (props) => {
-  // let column = Math.round((props.height || 294) / 42); // 纠正高度
-  let column = 7; // 纠正高度
-  // if (props.column) {
-  //   column = column > 7 ? 7 : column < 3 ? 3 : column;
-  // }
-  // column += column % 2 === 0 ? 1 : 0;
-  const centerNum = (column - 1) / 2; // 设置奇数位
-  const vh = 42 * (centerNum * 2 + 1); // 设置高度
-  const vw = props.width || Math.round(width / (props.row || 3)); // 设置宽度
-  const datas = []; // 重新组装数据
-  const list = props.data || []; // 真实数据
-  for (let i = 0; i < column; i++) {
-    if (i === centerNum) {
-      datas.push(...list);
-    } else {
-      datas.push(null);
-    }
-  }
-  // 记录位置
-  let initIndex = 3;
-  const [position, setPosition] = useState(initIndex);
-  const [isScroll, setScroll] = useState(false);
+    row_num = props.column || 7; // 值为 3，5，7，9
+    let curIndex = props.index || 0;
+    const items = props.items || [];
+    const valueKey = props.label || 'value';
+    const curValue = props.value || '';
+    const unit = props.unit || '';
 
-  function onScroll(e) {
-    if (!isScroll) {
-      setScroll(true);
-    }
-    const y = e.nativeEvent.contentOffset.y + centerNum * 42;
-    // 一下判断避免过度渲染
-    const nextIndex = Math.round(y / 42);
-    if (nextIndex != position) {
-      // initIndex = nextIndex
-      setPosition(nextIndex);
-    }
-  }
-
-  function onScrollEnd() {
-    // console.log('34567890====>');
-    // setPosition(initIndex);
-    if (props.onChange && props.data) {
-      const i = position - centerNum;
-      props.onChange(i, props.data[i]);
-    }
-  }
-
-  function itemView() {
-    return datas.map((e, index) => {
-      const isd = e != null;
-      return (
-        <View
-          key={`k${index}`}
-          style={[index === position ? itemStyle : itemStyle2]}>
-          <Text
-            onPress={index === position ? props.onPress : null}
-            ellipsizeMode="tail"
-            numberOfLines={1}
-            style={[
-              textStyle,
-              index === position ? props.selectTextStyle : { color: '#232323' },
-            ]}>{`${isd ? e : ''}`}</Text>
-        </View>
-      );
-    });
-  }
-
-  function scrollTo(view) {
-    if (props.value == null) {
-      return;
-    }
-    const value = props.value;
-    if (!isScroll && value) {
-      let vind = 0;
-      datas.forEach((e, index) => {
-        if (value === e) {
-          vind = index - initIndex;
+    if (curValue?.length > 0) {
+      items.forEach((e, index) => {
+        if (typeof e == 'string' || typeof e == 'number') {
+          if (e == curValue) {
+            curIndex = index;
+          }
+        } else {
+          if (e[valueKey] == curValue) {
+            curIndex = index;
+          }
         }
       });
-      const timer = setTimeout(() => {
-        clearTimeout(timer);
-        view?.scrollTo({ x: 0, y: vind * 42, animated: true });
-      }, 100);
-      // setPosition(posit);
+    }
+
+    this.state = { curIndex, valueKey, unit, items };
+  }
+
+  static getDerivedStateFromProps(nextProps, nextState) {
+    if (nextProps.items.length != nextState.items.length) {
+      return nextProps;
+    } else {
+      return null
     }
   }
 
-  return (
-    <View
-      key={props.key}
-      style={{
-        ...scrollStyle,
-        width: vw,
-        height: vh,
-        maxHeight: vh,
-        ...props.scrollStyle,
-      }}>
-      <ScrollView
-        style={{ width: '100%' }}
-        // onLayout={() => scrollTo(scrollView)}
-        ref={scrollTo}
-        bounces={false}
-        snapToInterval={42}
-        // pagingEnabled={true}
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        onMomentumScrollEnd={onScrollEnd}
-        showsVerticalScrollIndicator={false}>
-        {itemView()}
-      </ScrollView>
-      <View style={lineStyle} pointerEvents="none" />
-    </View>
-  );
-};
+  // componentDidUpdate(prevProps, prevState) {}
 
-const scrollStyle = {
-  width: 128,
-  height: 294,
-  // maxHeight: 294,
-  backgroundColor: '#FFF',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-const lineStyle = {
-  width: '94%',
-  height: 40,
-  borderTopWidth: 1,
-  borderBottomWidth: 1,
-  borderBottomColor: '#eee',
-  borderTopColor: '#eee',
-  position: 'absolute',
-};
-const itemStyle = {
-  height: 42,
-  alignItems: 'center',
-  justifyContent: 'center',
-};
-const itemStyle2 = {
-  height: 42,
-  opacity: 0.6,
-  transform: [{ scale: 0.87 }],
-  alignItems: 'center',
-  justifyContent: 'center',
-};
-const textStyle = {
-  color: '#232323',
-  width: '100%',
-  fontSize: 17,
-  textAlign: 'center',
-  fontWeight: '600',
-};
+  onChangeItem = (index) => {
+    // console.log('onChangeItem=========>', index);
+    if (this.props.onChange) {
+      const item = this.state.items[index];
+      this.props.onChange(item, index + 1);
+    }
+  }
 
-export default Picker;
+  // 点击事件
+  onPressItem = (idx) => {
+    if (this._scrollView) {
+      this._scrollView.scrollTo({ y: idx * item_height, animated: true });
+      this.onChangeItem(idx);
+    }
+  }
+
+  // 绑定
+  bindRef = (view) => {
+    this._scrollView = view;
+    const curIndex = this.state.curIndex;
+    if (view && curIndex > 0) {
+      const timer = setTimeout(() => {
+        clearTimeout(timer);
+        view.scrollTo({ y: curIndex * item_height, animated: true });
+      }, 100);
+    }
+  }
+
+  onScrolling = ({ nativeEvent }) => {
+    // console.log(nativeEvent.contentOffset)
+    const curIndex = Math.round(nativeEvent.contentOffset.y / item_height);
+    this._isScroll = true;
+    if (this.state.curIndex != curIndex) {
+      this.setState({ curIndex });
+      // console.log('onScrolling=========>', curIndex)
+    }
+  }
+
+  onScrollEnd = (res) => {
+    const nativeEvent = res.nativeEvent;
+    const curIndex = Math.round(nativeEvent.contentOffset.y / item_height);
+    if (this._isScroll) {
+      this.setState({ curIndex });
+      this.onChangeItem(curIndex);
+      // console.log('onScrollEnd=========>', curIndex)
+    }
+    this._isScroll = false;
+  }
+
+  render() {
+    const items = this.state.items;
+    return (
+      <View style={this.props.style || styles.picker}>
+        <ScrollView
+          ref={this.bindRef}
+          style={styles.scroll(row_num)}
+          bounces={false}
+          snapToInterval={item_height}
+          scrollEventThrottle={50}
+          onScroll={this.onScrolling}
+          onMomentumScrollEnd={this.onScrollEnd}
+          showsVerticalScrollIndicator={false}>
+          <View style={styles.emtity(row_num)} />
+          {items.map(this.itemView)}
+          <View style={styles.emtity(row_num)} />
+        </ScrollView>
+        <View style={styles.window(row_num)} pointerEvents='none' />
+      </View>
+    )
+  }
+
+  itemView = (item, index) => {
+    const { curIndex, valueKey, unit } = this.state;
+    const diff = Math.pow((curIndex - index) % row_num, 2);
+    const style = curIndex == index ? styles.value2 : styles.value;
+    // const diff2 = diff * diff;
+    // const transform = [{ scale: 1 - 0.01 * diff }, { rotateX: `${diff * 3}deg` }];
+    const transform = [{ rotateX: `${diff * 3}deg` }];
+    const opacity = 1 - 0.12 * diff;
+    const fontSize = 18 - Math.abs(curIndex - index);
+    let value = null;
+    if (typeof item == 'string' || typeof item == 'number') {
+      value = item;
+    } else {
+      value = item[valueKey];
+    }
+    return (
+      <TouchableOpacity key={value} style={styles.layout} activeOpacity={0.8} onPress={this.onPressItem.bind(this, index)}>
+        <Text style={{ ...style, fontSize, opacity, transform }} numberOfLines={1} ellipsizeMode="clip">{value}{unit}</Text>
+      </TouchableOpacity>
+    )
+  }
+}
+
+const styles = StyleSheet.create({
+  picker: {
+  },
+  scroll: (num) => ({
+    minHeight: item_height * num,
+    maxHeight: item_height * num,
+    paddingHorizontal: 16,
+  }),
+  emtity: (num) => ({
+    height: item_height * (num - 1) / 2,
+    minHeight: item_height * (num - 1) / 2
+  }),
+  window: (num) => ({
+    width: '100%',
+    height: item_height + 6,
+    zIndex: 9,
+    bottom: item_height * (num - 1) / 2 - 3,
+    position: 'absolute',
+    borderTopColor: '#efefef',
+    borderBottomColor: '#efefef',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    // backgroundColor: '#ff009930'
+  }),
+  layout: {
+    height: item_height,
+    minHeight: item_height,
+    justifyContent: 'center',
+  },
+  value: {
+    textAlign: 'center',
+    color: '#535353',
+    fontSize: 17,
+  },
+  value2: {
+    textAlign: 'center',
+    color: '#232323',
+    fontSize: 18,
+  }
+});

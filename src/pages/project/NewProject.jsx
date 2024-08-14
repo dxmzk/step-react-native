@@ -1,17 +1,17 @@
 /**
  * Author: Meng
- * Date: 2022-09-27
+ * Date: 2024-08-10
  * Desc:
  */
 
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Header, CompatButton} from '../../components';
-import {LiveComponent, HooksWidget} from '../../libs/hook_widget/index'
+import {LiveComponent, LiveWidget} from '../../libs/hook_widget/index'
 import ProjectModel from './ProjectModel'
 
 let store = null
-const Project = () => {
+const NewProject = () => {
   store = new ProjectModel();
   return <LiveComponent liveModel={store} children={renderVIew}/>  
 };
@@ -21,7 +21,7 @@ function renderVIew() {
   return (
     <View style={styles.page}>
       <Header />
-      <HooksWidget data={store.curDate} child={dateView}/>
+      <LiveWidget data={store.curDate} child={dateView}/>
       {dateView()}
     </View>
   );
@@ -48,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Project;
+export default NewProject;

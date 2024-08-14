@@ -1,10 +1,10 @@
 /**
  * Author: Meng
- * Date: 2021-09-27
+ * Date: 2024-08-10
  * Desc: 基础能力(硬件，系统)API
  */
 import { StatusBar, Alert, Platform, Linking, Dimensions, DeviceEventEmitter } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
+// import DeviceInfo from 'react-native-device-info';
 // import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 // 原生api配置项
@@ -25,7 +25,7 @@ const bottomBarHeight = 0;
 const statusBarHeight = StatusBar.currentHeight || 0;
 const os = Platform.OS;
 const osVersion = Platform.Version;
-const appVersion = DeviceInfo.getVersion();
+const appVersion = '1.0.1';
 
 // 获取设备信息
 async function getAppVersion() {
@@ -40,8 +40,8 @@ async function getScreenInfo() {
 // 获取设备信息
 async function getDeviceInfo() {
   // {getBuildNumber, getDeviceId, getIpAddress, getPhoneNumber, getUniqueId}
-  const uniqueId = DeviceInfo.getUniqueId();
-  const machine = DeviceInfo.getModel();
+  const uniqueId = '' // DeviceInfo.getUniqueId();
+  const machine = '' // DeviceInfo.getModel();
 
   return { os, osVersion, appVersion, machine, uniqueId };
 }

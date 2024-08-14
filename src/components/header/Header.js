@@ -1,6 +1,6 @@
 /**
  * Author: Meng
- * Date: 2021-09-27
+ * Date: 2024-08-10
  * Desc:
  * 注意：这里顶部返回键未做返回上一页
  * 下面有实现方式但注释了
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   box: {
     width: '100%',
     maxWidth: '100%',
-    height: 48,
+    height: 50,
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: 'white',
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   back: {
-    height: 48,
+    height: 50,
     paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
