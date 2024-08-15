@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 // import {useNavigation} from '@react-navigation/native';
 
-import Configs from '../../config';
+import Configs from '../../../config/index';
 
 import LogModel from './log/LogModel';
 import PanelModel from './panel/PanelModel';
@@ -33,10 +33,7 @@ function DebugBox() {
       setVisible(data);
     });
     const emitter2 = DeviceEventEmitter.addListener('app-request-log', data => {
-      logs.push(data);
-      const num3 = logs.length - maxLog;
-      let list = num3 > 0 ? logs.slice(num3, logNum) : [].concat(logs);
-      setLogs(list);
+      addLog(data, maxLog);
     });
 
     return () => {
@@ -44,6 +41,24 @@ function DebugBox() {
       emitter2.remove();
     };
   }, []);
+
+  // 清空日志
+  function clearLogs() {
+    setLogs([]);
+  }
+
+  // 添加日志
+  function addLog(data, maxLog) {
+    // console.log('-----> DebugBox addLog:', logs.length, data);
+    const endDate = Date.now();
+    data.date = new Date(data.startDate).toLocaleString();
+    data.time = Math.round((endDate - data.startDate) / 1000);
+    // 
+    logs.push(data);
+    const num3 = logs.length - maxLog;
+    let list = num3 > 0 ? logs.slice(num3, logs.length) : [].concat(logs);
+    setLogs(list);
+  }
 
   function onPress() {
     setVisible1(true);
@@ -68,9 +83,7 @@ function DebugBox() {
           onClose={() => {
             setVisible1(false);
           }}
-          onClean={() => {
-            setLogs([]);
-          }}
+          onClean={clearLogs}
         />
         <PanelModel
           visible={visible2}

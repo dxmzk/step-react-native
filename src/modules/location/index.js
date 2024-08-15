@@ -12,30 +12,32 @@ class Location {
    */
   static getCurLocation() {
     return new Promise(resolve => {
+      // 权限检查
+
       // 获取定位信息
 
       // 获取失败, 从缓存中获取
       // Location.getStore();
-      // 存储定位信息
+
+      // 更新存储定位信息
       // Location.setStore('location');
     });
   }
 
   /**
-   * 获取保存定位信息
+   * 获取保存定位信息 {lat, lon, address, city, code}
    */
   static getStore() {
-    return AsyncStorage.getItem('location');
+    const latlon = AsyncStorage.getItem('location');
+    return latlon ? JSON.parse(latlon) : null;
   }
 
   /**
    * 保存定位信息
-   * @param {*} location
+   * @param {*} location {lat, lon}
    */
-  static setStore(location) {
-    if(location){
-      AsyncStorage.setItem('location', location);
-    }
+  static setStore(location={}) {
+    AsyncStorage.setItem('location', JSON.stringify(location));
   }
 
   /**

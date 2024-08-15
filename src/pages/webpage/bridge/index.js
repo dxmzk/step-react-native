@@ -2,6 +2,15 @@
  * Author: Meng
  * Date: 2024-08-10
  * Desc: Web消息 处理与解析
+ * bridge: 原生API配置项
+ *    event: '事件名称', 
+ *    func: 执行函数, 
+ *    mode: 是否需要更新WebPage状态, 
+ *    auth: 是否需要权限 
+ * eventInfo: Web消息
+ *    event: '事件名称',
+ *    params: 参数,
+ *    token: 访问权限token
  */
 
 import bridge_account from './bridge_account';
@@ -25,7 +34,7 @@ export async function handlerWebMessage(info = {}, navigation, sendEvent) {
       result.event = info.event;
       if (item && item.func) {
         if (item.auth) {
-          const useApi = checkApiAuth(info.key);
+          const useApi = checkApiAuth(info.token);
           if (!useApi) {
             result.data = '你没有权限访问该方法！';
             return
@@ -45,11 +54,11 @@ export async function handlerWebMessage(info = {}, navigation, sendEvent) {
         result.data = `未发现${info.event}方法！`;
       }
     } catch (error) {
-      console.warn(`handlerWebMessage ------> Err: `, error);
-      result.data = 'Handle your api error!';
+      console.warn(`------> handlerWebMessage Err: `, error);
+      result.data = 'handle your api error!';
     }
   } else {
-    console.warn(`handlerWebMessage ------> api event = undefined `);
+    console.warn(`------> handlerWebMessage api event = undefined `);
     result.data = 'Your api event value = undefined';
   }
   // 发送消息
@@ -63,7 +72,7 @@ export function parseWebEvent(nativeEvent = {}) {
   const url = nativeEvent.url;
   const data = nativeEvent.data;
   const title = nativeEvent.title;
-  console.log(`parseWebEvent ------> title: ${title}, url: ${url}, data: ${data}`);
+  console.log(`------> parseWebEvent title: ${title}, url: ${url}, data: ${data}`);
 
   let info = {};
   try {
@@ -71,15 +80,15 @@ export function parseWebEvent(nativeEvent = {}) {
       info = JSON.parse(data);
     }
   } catch (err) {
-    console.warn(`parseWebEvent JSON.parse ------> Err: `, err);
+    console.warn(`------> parseWebEvent JSON.parse Err: `, err);
     info = { event: 'parse_error', data: '数据格式错误: {event, params, key}', code: -1 }
   }
   return info;
 }
 
 /**
- * key: api授权访问的key
+ * token: api授权访问的token
  */
-function checkApiAuth(key = '') {
+function checkApiAuth(token = '') {
   return true;
 }
