@@ -8,8 +8,9 @@ import React from 'react';
 import {DeviceEventEmitter} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 
+import Configs from './config/index';
 import AppStackNavigator from './pages/router';
-import DebugBox from './pages/widget/DebugBox';
+import DebugBox from './pages/widget/debug/DebugBox';
 import AppLoading from './pages/widget/Loading';
 import HintModel from './pages/widget/HintModel';
 
@@ -22,6 +23,8 @@ function getRoute(route) {
   return route;
 }
 
+// 初始化配置 -useEffect 会加载两次
+Configs.init();
 const App = () => {
   return (
     <NavigationContainer

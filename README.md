@@ -2,6 +2,19 @@
 
 注: !!! 项目 库(package.json -> dependencies) 每3个月要主动升级一次 !!!
 
+
+## 库
+
+- 存储: @react-native-async-storage/async-storage (除非有性能问题,否则不要体会)
+- 相机: react-native-camera
+- 定位: react-native-amap-geolocation
+- 蓝牙: 
+- 设备: react-native-device-info
+- 分享: react-native-share
+- 权限: react-native-permissions
+- 视频: react-native-video
+
+
 ## 项目目录
 
 ├── android                       Android开发工程

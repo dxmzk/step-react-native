@@ -15,10 +15,10 @@ import {
 } from 'react-native';
 // import {useNavigation} from '@react-navigation/native';
 
-import Configs from '../../config/index';
+import Configs from '../../../config/index';
 
-import LogModel from './debug/log/LogModel';
-import PanelModel from './debug/panel/PanelModel';
+import LogModel from './LogModel';
+import PanelModel from './PanelModel';
 
 function DebugBox() {
   // const navigation = useNavigation();

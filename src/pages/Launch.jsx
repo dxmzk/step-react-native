@@ -9,7 +9,6 @@ import {View, Text, Image, StyleSheet} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Images from '../assets/imgs';
-import Configs from '../config/index';
 import {initDeviceInfo} from '../config/constants';
 import {initLibs} from '../libs/index';
 
@@ -17,8 +16,6 @@ const Launch = props => {
   let {top, bottom} = useSafeAreaInsets(); // 安全区域
 
   useEffect(() => {
-    // 初始化配置
-    Configs.init();
     // 初始化设备信息
     initDeviceInfo(top, bottom);
     // 初始化三方库
