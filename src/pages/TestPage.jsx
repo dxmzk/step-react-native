@@ -1,27 +1,28 @@
 /**
  * Author: Meng
  * Date: 2024-08-10
- * Desc:
+ * Desc: 测试
+ *
  */
 
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import SelectDatePicker from '../components/SelectDatePicker'
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet} from 'react-native';
 
-const TestPage = () => {
+function TestPage(props) {
+
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.page}>
-      <SelectDatePicker />
     </View>
   );
-};
-
-
+}
 
 const styles = StyleSheet.create({
   page: {
-    flex: 1
-  }
-})
+    flex: 1,
+  },
+});
 export default TestPage;
