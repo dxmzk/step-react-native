@@ -1,7 +1,7 @@
 /**
  * Author: Meng
  * Date: 2024-08-10
- * Desc:
+ * Desc: 
  *  mode: 1/2 拍照/录像
  *  camera: 1/2 前置/后置
  *  quality: 1/2/3 高/中/低
@@ -10,7 +10,7 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, DeviceEventEmitter} from 'react-native';
+import { View, StyleSheet, DeviceEventEmitter } from 'react-native';
 import {Camera, useCameraDevice} from 'react-native-vision-camera';
 
 function CameraPage(props) {
@@ -34,14 +34,14 @@ function CameraPage(props) {
       <Camera style={styles.camera} device={device} isActive={true} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   page: {
-    flex: 1,
+    flex: 1
   },
   camera: {
-    flex: 1,
-  },
-});
+    flex: 1
+  }
+})
 export default CameraPage;

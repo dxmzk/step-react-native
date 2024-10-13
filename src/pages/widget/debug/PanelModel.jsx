@@ -32,6 +32,7 @@ function PanelModel(props) {
   const list = [
     {tag: 1, title: '调试H5', path: ''},
     {tag: 2, title: '清除缓存', path: ''},
+    {tag: 3, title: '调试页面', path: 'TestPage'},
   ];
 
   useEffect(() => {}, []);
@@ -68,18 +69,13 @@ function PanelModel(props) {
     }
   }
 
-  // 跳转H5页面
+  // 跳转H5页面 
   function gotoH5Page() {
-    if (!h5Path) {
+    if(!h5Path) {
       return;
     }
     // 保存H5地址到本地存储
-    navigation.navigate('WebPage', {
-      url: h5Path,
-      title: 'H5调试',
-      mode: 1, // 1: H5, 2: 
-      params: {},
-    });
+    navigation.navigate('WebPage', {url: h5Path});
     onBack();
   }
 
